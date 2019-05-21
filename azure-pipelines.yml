@@ -15,18 +15,21 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- script: |
-    npm install
+- task: Npm@1
   displayName: 'npm install'
+  inputs:
+    workingDir: src
+    verbose: false
 
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: '$(System.DefaultWorkingDirectory)'
+    PathtoPublish: '$(System.DefaultWorkingDirectory)/src'
 
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    SourceFolder: '$(System.DefaultWorkingDirectory)/src'
     Contents: |
-      **\*.js
+      **\**
       package.json
+      !**\node_modules\**
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
